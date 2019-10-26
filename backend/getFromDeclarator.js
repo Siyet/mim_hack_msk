@@ -8,12 +8,17 @@ const request = require("request"),
 // (async () => {
 if (!process.argv || process.argv.length < 2 || !process.argv[2])
   throw "script need argument with target url";
+let f_name = process.argv[2].split("/").slice(-1);
 request
   .get(process.argv[2])
   .on("error", function(err) {
     console.error(err);
   })
-  .pipe(fs.createWriteStream("declarations.json"));
+  .pipe(
+    fs.createWriteStream(
+      f_name.slice(-5) === ".json" ? f_name : f_name + ".json"
+    )
+  );
 // .pipe(request.put("http://mysite.com/img.png"));
 // console.time("getting declarations");
 // let declarations = await rp({
