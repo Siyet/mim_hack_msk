@@ -4,10 +4,20 @@ const fs = require("fs"),
 
 (async () => {
   let ds = await db.view("index", "by_ns", {
-    keys: ["declaration"],
+    include_docs: false,
     reduce: false
   });
+
   while (ds.rows.length) {
-    await db.bulk;
+    let part =
+      ds.rows.length > 1000
+        ? ds.rows.splice(0, 1000)
+        : ds.rows.splice(0, db.rows.length);
+    await db.bulk({
+      docs: part.map(item => {
+        item._id =
+          (item.main && item.main.person && item.main.person.id) || item._id;
+      })
+    });
   }
 })();
