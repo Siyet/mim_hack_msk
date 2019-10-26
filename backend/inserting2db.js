@@ -16,7 +16,7 @@ const jsonStream = StreamArray.withParser();
 let part = [],
   idx = 1;
 jsonStream.on("data", ({ key, value }) => {
-  value.ns = "declaration";
+  value.country = "Russia";
   part.push(value);
   if (part.length < 1000) return;
   console.log(
