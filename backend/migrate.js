@@ -3,6 +3,6 @@ const fs = require("fs"),
   db = nano.db.use("mim");
 
 (async () => {
-  let ds = await db.view("index", "ny_ns", { keys: ["declaration"] });
+  let ds = await db.view("index", "by_ns", { keys: ["declaration"] });
   console.log(ds);
 })();
