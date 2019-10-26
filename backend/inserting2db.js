@@ -22,7 +22,7 @@ jsonStream.on("data", ({ key, value }) => {
   console.log(
     `\n[${new Date().toJSON()}] -=-=-=-= Bulk saving part ${idx} =-=-=-=-\n`
   );
-  db.bulk({ docs: part.splice(0, 500) }).then(resp => {
+  db.bulk({ docs: part.splice(0, 1000) }).then(resp => {
     if (
       !resp ||
       !Array.isArray(resp) ||
@@ -36,7 +36,7 @@ jsonStream.on("data", ({ key, value }) => {
 jsonStream.on("end", () => {
   console.log(`\n[${new Date().toJSON()}] -=-=-=-= All done =-=-=-=-\n`);
   if (!part.length) return;
-  db.bulk({ docs: part }).then(console.log);
+  db.bulk({ docs: part.splice(0, 1000) }).then(console.log);
 });
 
 const filename = path.join(__dirname, "tmp/declarations.json");
