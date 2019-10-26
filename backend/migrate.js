@@ -7,5 +7,7 @@ const fs = require("fs"),
     keys: ["declaration"],
     reduce: false
   });
-  console.log(ds);
+  while (ds.rows.length) {
+    await db.bulk;
+  }
 })();
