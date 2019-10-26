@@ -9,12 +9,12 @@ const request = require("request"),
 if (!process.argv || process.argv.length < 2 || !process.argv[2])
   throw "script need argument with target url";
 let f_name = process.argv[2].split("/").slice(-1);
-request
-  .get(process.argv[2])
-  .on("error", function(err) {
-    console.error(err);
-  })
-  .pipe(fs.createWriteStream(f_name));
+// request
+//   .get(process.argv[2])
+//   .on("error", function(err) {
+//     console.error(err);
+//   })
+//   .pipe(fs.createWriteStream(f_name));
 // .pipe(request.put("http://mysite.com/img.png"));
 // console.time("getting declarations");
 // let declarations = await rp({
