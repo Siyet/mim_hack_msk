@@ -22,7 +22,7 @@ jsonStream.on("data", ({ key, value }) => {
   console.log(
     `\n[${new Date().toJSON()}] -=-=-=-= Bulk saving part ${idx} =-=-=-=-\n`
   );
-  db.bulk({ docs: part }).then(console.log);
+  db.bulk({ docs: part.splice(0, 500) }).then(console.log);
   idx += 1;
 });
 
