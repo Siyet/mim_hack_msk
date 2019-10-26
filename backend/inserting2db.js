@@ -21,5 +21,5 @@ jsonStream.on("end", () => {
   console.log("All done");
 });
 
-const filename = path.join(__dirname, "tmp/daclarations.json");
+const filename = path.join(__dirname, "tmp/declarations.json");
 fs.createReadStream(filename).pipe(jsonStream.input);
