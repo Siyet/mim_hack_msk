@@ -18,11 +18,13 @@ let part = [],
 jsonStream.on("data", ({ key, value }) => {
   value.ns = "declaration";
   part.push(value);
-  if (part.length < 500) return;
+  if (part.length < 1000) return;
   console.log(
     `\n[${new Date().toJSON()}] -=-=-=-= Bulk saving part ${idx} =-=-=-=-\n`
   );
-  db.bulk({ docs: part.splice(0, 500) }).then(console.log);
+  db.bulk({ docs: part.splice(0, 500) }).then(resp => {
+    if (!resp || !resp.ok) console.log(resp);
+  });
   idx += 1;
 });
 
