@@ -13,12 +13,23 @@ const jsonStream = StreamArray.withParser();
 
 //You'll get json objects here
 //Key is an array-index here
+let part = [],
+  idx = 1;
 jsonStream.on("data", ({ key, value }) => {
-  console.log(key, value);
+  value.ns = "declaration";
+  part.push(value);
+  if (part.length < 500) return;
+  console.log(
+    `\n[${new Date().toJSON()}] -=-=-=-= Bulk saving part ${idx} =-=-=-=-\n`
+  );
+  db.bulk({ docs: part }).then(console.log);
+  idx += 1;
 });
 
 jsonStream.on("end", () => {
-  console.log("All done");
+  console.log(`\n[${new Date().toJSON()}] -=-=-=-= All done =-=-=-=-\n`);
+  if (!part.length) return;
+  db.bulk({ docs: part }).then(console.log);
 });
 
 const filename = path.join(__dirname, "tmp/declarations.json");
