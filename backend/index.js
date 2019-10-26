@@ -2,6 +2,7 @@
 
 const request = require("request"),
   nano = require("nano")("http://admin:vbyjvtn@tseluyko.ru:5984"),
+  fs = require("fs"),
   db = nano.db.use("mim"),
   PART_QUOTA = 500;
 (async () => {
