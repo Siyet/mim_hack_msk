@@ -5,3 +5,21 @@ const fs = require("fs"),
 let decls = JSON.parse(fs.readFileSync("tmp/declarations.json"));
 
 console.log(decls.length);
+
+const StreamArray = require("stream-json/streamers/StreamArray");
+const path = require("path");
+
+const jsonStream = StreamArray.withParser();
+
+//You'll get json objects here
+//Key is an array-index here
+jsonStream.on("data", ({ key, value }) => {
+  console.log(key, value);
+});
+
+jsonStream.on("end", () => {
+  console.log("All done");
+});
+
+const filename = path.join(__dirname, "tmp/daclarations.json");
+fs.createReadStream(filename).pipe(jsonStream.input);
