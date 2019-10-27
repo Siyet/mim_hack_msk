@@ -16,7 +16,7 @@ const fs = require("fs"),
     await db.bulk({
       docs: part.map(item => {
         item._id =
-          (item.main && item.main.person && item.main.person.id) || item._id;
+          item.main && item.main.person ? item.main.person.id : item._id;
       })
     });
   }
