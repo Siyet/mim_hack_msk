@@ -17,7 +17,7 @@ const fs = require("fs"),
     part = await db.list({
       include_docs: false,
       reduce: false,
-      keys: part.map(row => row._id)
+      keys: part.map(row => row.id)
     });
 
     part.rows.map(row => {
