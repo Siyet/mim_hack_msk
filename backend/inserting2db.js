@@ -16,8 +16,8 @@ const jsonStream = StreamArray.withParser();
 let part = [],
   idx = 1;
 jsonStream.on("data", ({ key, value }) => {
-  value._id =
-    value.main && value.main.person ? value.main.person.id + "" : undefined;
+  // value._id =
+  //   value.main && value.main.person ? value.main.person.id + "" : undefined;
   value.country = "Russia";
   part.push(value);
   if (part.length < 1000) return;
