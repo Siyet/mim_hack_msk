@@ -10,16 +10,16 @@ const fs = require("fs"),
   let okreg = {};
   while (ds_ids.rows.length) {
     let part =
-      ds_ids.rows.length > 1000
-        ? ds_ids.rows.splice(0, 1000)
+      ds_ids.rows.length > 500
+        ? ds_ids.rows.splice(0, 500)
         : ds_ids.rows.splice(0, ds_ids.rows.length);
-    console.log(ds_ids.rows.length, part.length, part.map(row => row.id));
+    console.log(ds_ids.rows.length, part.length);
     part = await db.list({
       include_docs: false,
       reduce: false,
-      keys: part.map(row => row.id)
+      keys: part.map(row => row._id)
     });
-    console.log(part);
+
     part.rows.map(row => {
       if (
         row &&
@@ -29,7 +29,6 @@ const fs = require("fs"),
         row.main.office.region.id
       ) {
         okreg["id" + row.main.office.region.id] = row.main.office.region.name;
-        // console.log(111);
       }
 
       return;
