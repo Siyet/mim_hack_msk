@@ -13,13 +13,13 @@ const fs = require("fs"),
       ds_ids.rows.length > 1000
         ? ds_ids.rows.splice(0, 1000)
         : ds_ids.rows.splice(0, ds_ids.rows.length);
-    console.log(ds_ids.rows.length, part.length);
+    console.log(ds_ids.rows.length, part.length, part);
     part = await db.list({
       include_docs: false,
       reduce: false,
       keys: part.map(row => row.id)
     });
-    // console.log(part);
+    console.log(part);
     part.rows.map(row => {
       if (
         row &&
