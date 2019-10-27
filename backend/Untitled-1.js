@@ -3,48 +3,45 @@ const fs = require("fs"),
   db = nano.db.use("mim");
 
 (async () => {
-  let ds_ids = await db.list({
+  let ds_ids = (await db.view("daclarator", "okrug", {
     include_docs: false,
+    keys: [
+      [85, "Республика Тува (Тыва)"],
+      [91, "Чувашская республика - Чувашия"],
+      [108, "Ханты-Мансийский автономный округ — Югра"],
+      [109, "Республика Крым*"],
+      [110, "Севастополь*"]
+    ],
     reduce: false
-  });
-  let okreg = {};
-  while (ds_ids.rows.length) {
-    let part =
-      ds_ids.rows.length > 500
-        ? ds_ids.rows.splice(0, 500)
-        : ds_ids.rows.splice(0, ds_ids.rows.length);
-    console.log(ds_ids.rows.length, part.length);
-    part = await db.list({
-      include_docs: false,
-      reduce: false,
-      keys: part.map(row => row.id)
-    });
-
-    part.rows.map(row => {
-      if (
-        row &&
-        row.main &&
-        row.main.office &&
-        row.main.office.region &&
-        row.main.office.region.id
-      ) {
-        okreg["id" + row.main.office.region.id] = row.main.office.region.name;
-      }
-
-      return;
-    });
-    // await db.bulk({
-    //   docs: part.map(item => {
-    //     if (!item.main) item._deleted = true;
-    //     else {
-    //       item._id = parseStr(
-    //         item.main && item.main.person ? item.main.person.id : item._id
-    //       );
-    //     }
-
-    //     return item;
-    //   })
-    // });
+  })).map(row => row.id);
+  let dict_of_change = {
+    z85: "Республика Тыва",
+    z91: "Чувашская Республика",
+    z108: "Ханты-Мансийский автономный округ",
+    z110: "Севастополь",
+    z109: "Республика Крым"
+  };
+  let completed = 0;
+  while (ds_ids.length > 0) {
+    if (completed % 1000 === 0)
+      console.log(`[${new Date().toJSON()}] ${completed} declarations updated`);
+    let resp = await fetch(
+      `http://admin:vbyjvtn@tseluyko.ru:5984/mim/_all_docs?keys=["${ds_ids
+        .splice(0, ds_ids.length > 1000 ? 1000 : ds_ids.length)
+        .join('","')}"]`
+    );
+    let _part = resp.rows.map(row => row.doc);
+    let d2update = [];
+    for (let idx = 0; idx < _part.length; idx++) {
+      let d = _part[idx];
+      if (dict_of_change["z" + d.main.office.region.id]) {
+        d.main.office.region.name =
+          dict_of_change["z" + d.main.office.region.id];
+        d2update.push(d);
+      } else throw Error("unexpected data");
+    }
+    d2update.length && (await db.bulk({ docs: d2update }).then(console.log));
   }
-  console.log(okreg);
+  // Если код уже существует, то смотрим счётчик, много ли вариантов, у кого больше вариантов, тот и верный,
+  // Также проверяем словарь замены
 })();
