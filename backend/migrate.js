@@ -3,7 +3,7 @@ const fs = require("fs"),
   db = nano.db.use("mim");
 
 (async () => {
-  let ds = await db.view("index", "by_ns", {
+  let ds = await db.view("index", "by_country", {
     include_docs: false,
     reduce: false
   });
