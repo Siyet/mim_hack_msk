@@ -9,6 +9,7 @@
   "author": "Siyet",
   "license": "MIT",
   "dependencies": {
+    "fetch": "^1.1.0",
     "nano": "^8.1.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
