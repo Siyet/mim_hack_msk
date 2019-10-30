@@ -21,9 +21,15 @@ model.add(Dense(1, activation='sigmoid'))
 
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs = 5000, batch_size=20, validation_data=(x_test, y_test))
+model.fit(x_train, y_train, epochs = 8000, batch_size=20, validation_data=(x_test, y_test))
 
 scores = model.evaluate(X, Y)
-print(model.metrics_names[1], scores[1]*100)
+secondScores = model.evaluate(x_test, y_test)
+
+if (scores < secondScores):
+   print("Доход чиновников, возможно, увеличиться на " + "\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*10))
+
+else:
+   print("Доход чиновников, возможно, уменьшиться на " + "\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*10))
 
 model.save('weights.h5')
